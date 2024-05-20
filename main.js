@@ -1,6 +1,7 @@
 import * as THREE from "three";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
+import { PLYLoader } from "three/examples/jsm/loaders/PLYLoader";
 
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(
@@ -17,6 +18,7 @@ document.body.appendChild(renderer.domElement);
 const controls = new OrbitControls(camera, renderer.domElement);
 controls.update();
 
+/*
 const geometry = new THREE.SphereGeometry(5, 60, 40);
 geometry.scale(-1, 1, 1);
 
@@ -30,6 +32,32 @@ const sphere = new THREE.Mesh(geometry, material);
 sphere.position.y = 4.0;
 // add scene
 scene.add(sphere);
+*/
+
+var material = new THREE.MeshPhongMaterial({
+  color: 0xffffff,
+  specular: 0x111111,
+  shininess: 200,
+  vertexColors: THREE.VertexColors,
+});
+
+const plyLoader = new PLYLoader();
+plyLoader.load(
+  "/room.ply",
+  function (geometry) {
+    geometry.computeVertexNormals();
+    const mesh = new THREE.Mesh(geometry, material);
+    mesh.rotateX(-Math.PI / 2);
+    mesh.scale.set(2, 2, 2);
+    scene.add(mesh);
+  },
+  (xhr) => {
+    console.log((xhr.loaded / xhr.total) * 100 + "% loaded");
+  },
+  (error) => {
+    console.log(error);
+  },
+);
 
 // setup renderer
 renderer.setSize(window.innerWidth, window.innerHeight);
@@ -123,6 +151,8 @@ loader.load(
 camera.position.z = 5.0;
 camera.position.y = 4.0;
 camera.position.x = -2.0;
+
+scene.background = new THREE.Color(0xffffff);
 
 const light = new THREE.DirectionalLight(0xffffff, 1);
 light.position.set(0, 1, 1).normalize();
