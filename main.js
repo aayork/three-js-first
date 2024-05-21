@@ -15,6 +15,7 @@ const camera = new THREE.PerspectiveCamera(
 const renderer = new THREE.WebGLRenderer();
 renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
+renderer.autoClear = false;
 
 const controls = new OrbitControls(camera, renderer.domElement);
 controls.update();
@@ -77,6 +78,7 @@ loader.load(
     chair.position.z = 0.7;
     chair.rotation.y = 7;
     chair.position.y = 0.03;
+    chair.rotation.z = 7;
     chair.scale.set(2.0, 2.0, 2.0);
 
     animate();
@@ -121,27 +123,26 @@ const viewer = new GaussianSplats3D.Viewer({
   renderer: renderer,
   camera: camera,
   useBuiltInControls: false,
-  ignoreDevicePixelRatio: false,
-  gpuAcceleratedSort: true,
-  halfPrecisionCovariancesOnGPU: true,
-  sharedMemoryForWorkers: true,
-  integerBasedSort: true,
-  dynamicScene: false,
-  webXRMode: GaussianSplats3D.WebXRMode.None,
-  renderMode: GaussianSplats3D.RenderMode.OnChange,
+  sharedMemoryForWorkers: false,
   sceneRevealMode: GaussianSplats3D.SceneRevealMode.Instant,
   antialiased: false,
-  focalAdjustment: 1.0,
   logLevel: GaussianSplats3D.LogLevel.None,
   sphericalHarmonicsDegree: 0,
-  sharedMemoryForWorkers: false,
   scene: scene,
 });
-viewer.addSplatScene("/room.ply").then(() => {
-  viewer.start();
-});
 
-renderer.setClearColor(0xffffff, 1);
+viewer
+  .addSplatScenes([
+    {
+      path: "/garden.ksplat",
+      position: [-0.5, 3, 1.5],
+      rotation: [1, 0, 0, 0],
+      scale: [1.0, 1.0, 1.0],
+    },
+  ])
+  .then(() => {
+    viewer.start();
+  });
 
 function animate() {
   requestAnimationFrame(animate);
