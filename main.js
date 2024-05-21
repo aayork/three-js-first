@@ -4,14 +4,7 @@ import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 import * as GaussianSplats3D from "@mkkellogg/gaussian-splats-3d";
 
 const scene = new THREE.Scene();
-const boxColor = 0xbbbbbb;
-const boxGeometry = new THREE.BoxGeometry(2, 2, 2);
-const boxMesh = new THREE.Mesh(
-  boxGeometry,
-  new THREE.MeshBasicMaterial({ color: boxColor }),
-);
-boxMesh.position.set(3, 2, 2);
-scene.add(boxMesh);
+
 const camera = new THREE.PerspectiveCamera(
   75,
   window.innerWidth / window.innerHeight,
@@ -19,48 +12,12 @@ const camera = new THREE.PerspectiveCamera(
   1000,
 );
 
-const viewer = new GaussianSplats3D.Viewer({
-  scene: scene,
-});
-viewer.addSplatScene("/room.ply").then(() => {
-  viewer.start();
-});
-
 const renderer = new THREE.WebGLRenderer();
 renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
 
 const controls = new OrbitControls(camera, renderer.domElement);
 controls.update();
-
-/*
-
-var material = new THREE.MeshPhongMaterial({
-  color: 0xffffff,
-  specular: 0x111111,
-  shininess: 200,
-  vertexColors: THREE.VertexColors,
-});
-
-
-const plyLoader = new PLYLoader();
-plyLoader.load(
-  "/room.ply",
-  function (geometry) {
-    geometry.computeVertexNormals();
-    const mesh = new THREE.Mesh(geometry, material);
-    mesh.rotateX(-Math.PI / 2);
-    mesh.scale.set(2, 2, 2);
-    scene.add(mesh);
-  },
-  (xhr) => {
-    console.log((xhr.loaded / xhr.total) * 100 + "% loaded");
-  },
-  (error) => {
-    console.log(error);
-  },
-);
-*/
 
 // setup renderer
 renderer.setSize(window.innerWidth, window.innerHeight);
@@ -155,11 +112,36 @@ camera.position.z = 5.0;
 camera.position.y = 4.0;
 camera.position.x = -2.0;
 
-scene.background = new THREE.Color(0xffffff);
-
 const light = new THREE.DirectionalLight(0xffffff, 1);
 light.position.set(0, 1, 1).normalize();
 scene.add(light);
+
+const viewer = new GaussianSplats3D.Viewer({
+  selfDrivenMode: true,
+  renderer: renderer,
+  camera: camera,
+  useBuiltInControls: false,
+  ignoreDevicePixelRatio: false,
+  gpuAcceleratedSort: true,
+  halfPrecisionCovariancesOnGPU: true,
+  sharedMemoryForWorkers: true,
+  integerBasedSort: true,
+  dynamicScene: false,
+  webXRMode: GaussianSplats3D.WebXRMode.None,
+  renderMode: GaussianSplats3D.RenderMode.OnChange,
+  sceneRevealMode: GaussianSplats3D.SceneRevealMode.Instant,
+  antialiased: false,
+  focalAdjustment: 1.0,
+  logLevel: GaussianSplats3D.LogLevel.None,
+  sphericalHarmonicsDegree: 0,
+  sharedMemoryForWorkers: false,
+  scene: scene,
+});
+viewer.addSplatScene("/room.ply").then(() => {
+  viewer.start();
+});
+
+renderer.setClearColor(0xffffff, 1);
 
 function animate() {
   requestAnimationFrame(animate);
