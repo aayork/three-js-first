@@ -24,7 +24,6 @@ controls.update();
 renderer.setSize(window.innerWidth, window.innerHeight);
 renderer.setClearColor({ color: 0x000000 });
 const element = renderer.domElement;
-// document.querySelector(".panorama_viewer").appendChild(element);
 renderer.render(scene, camera);
 
 const loader = new GLTFLoader();
@@ -35,7 +34,7 @@ loader.load(
     const chair = gltf.scene;
     scene.add(chair);
     chair.position.y = 0.03;
-    chair.position.x = -0.4;
+    chair.position.x = -0.8;
     chair.scale.set(2.0, 2.0, 2.0);
 
     animate();
@@ -54,7 +53,7 @@ loader.load(
   function (gltf) {
     const chair = gltf.scene;
     scene.add(chair);
-    chair.position.x = 0.4;
+    chair.position.x = 2;
     chair.rotation.y = 3;
     chair.position.y = 0.03;
     chair.scale.set(2.0, 2.0, 2.0);
@@ -78,7 +77,6 @@ loader.load(
     chair.position.z = 0.7;
     chair.rotation.y = 7;
     chair.position.y = 0.03;
-    chair.rotation.z = 7;
     chair.scale.set(2.0, 2.0, 2.0);
 
     animate();
@@ -135,9 +133,9 @@ viewer
   .addSplatScenes([
     {
       path: "/garden.ksplat",
-      position: [-0.5, 3, 1.5],
-      rotation: [1, 0, 0, 0],
-      scale: [1.0, 1.0, 1.0],
+      position: [0, 3.58, 0],
+      rotation: [1, 0, 0, 0.2768976],
+      scale: [1.15, 1.0, 1.0],
     },
   ])
   .then(() => {
