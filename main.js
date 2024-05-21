@@ -142,6 +142,21 @@ viewer
     viewer.start();
   });
 
+var localPlane = new THREE.Plane();
+
+var globalPlane = new THREE.Plane();
+
+renderer.clippingPlanes = [globalPlane];
+
+renderer.localClippingEnabled = true;
+
+var material = new THREE.MeshPhongMaterial({
+  clippingPlanes: [localPlane],
+  clipShadows: true,
+});
+
+viewer.clippingPlanes = [globalPlane];
+
 function animate() {
   requestAnimationFrame(animate);
   renderer.render(scene, camera);
