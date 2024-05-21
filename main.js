@@ -1,15 +1,30 @@
 import * as THREE from "three";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
-import { PLYLoader } from "three/examples/jsm/loaders/PLYLoader";
+import * as GaussianSplats3D from "@mkkellogg/gaussian-splats-3d";
 
 const scene = new THREE.Scene();
+const boxColor = 0xbbbbbb;
+const boxGeometry = new THREE.BoxGeometry(2, 2, 2);
+const boxMesh = new THREE.Mesh(
+  boxGeometry,
+  new THREE.MeshBasicMaterial({ color: boxColor }),
+);
+boxMesh.position.set(3, 2, 2);
+scene.add(boxMesh);
 const camera = new THREE.PerspectiveCamera(
   75,
   window.innerWidth / window.innerHeight,
   0.1,
   1000,
 );
+
+const viewer = new GaussianSplats3D.Viewer({
+  scene: scene,
+});
+viewer.addSplatScene("/room.ply").then(() => {
+  viewer.start();
+});
 
 const renderer = new THREE.WebGLRenderer();
 renderer.setSize(window.innerWidth, window.innerHeight);
@@ -19,20 +34,6 @@ const controls = new OrbitControls(camera, renderer.domElement);
 controls.update();
 
 /*
-const geometry = new THREE.SphereGeometry(5, 60, 40);
-geometry.scale(-1, 1, 1);
-
-// create texture
-const textureLoader = new THREE.TextureLoader();
-const texture = textureLoader.load("/equirectangular-photosphere.png");
-const material = new THREE.MeshBasicMaterial({ map: texture });
-
-// create sphere
-const sphere = new THREE.Mesh(geometry, material);
-sphere.position.y = 4.0;
-// add scene
-scene.add(sphere);
-*/
 
 var material = new THREE.MeshPhongMaterial({
   color: 0xffffff,
@@ -40,6 +41,7 @@ var material = new THREE.MeshPhongMaterial({
   shininess: 200,
   vertexColors: THREE.VertexColors,
 });
+
 
 const plyLoader = new PLYLoader();
 plyLoader.load(
@@ -58,6 +60,7 @@ plyLoader.load(
     console.log(error);
   },
 );
+*/
 
 // setup renderer
 renderer.setSize(window.innerWidth, window.innerHeight);
