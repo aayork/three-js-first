@@ -27,95 +27,55 @@ controls.update();
 
 const loader = new GLTFLoader();
 
-const bonsai = new URL("/bonsai.splat", import.meta.url).href;
+const bonsai = new URL("./public/bonsai.splat", import.meta.url).href;
 const splat = new ZapSplat.GaussianSplatMesh(bonsai, Infinity);
-splat.load().then(() => {
-  scene.add(splat);
-});
+scene.add(splat);
 
 const maskPlane = new ZapSplat.MaskingPlane();
 
 splat.addMaskMesh(maskPlane);
 
-loader.load(
+// Function to load a GLTF file and add it to the scene
+function loadGLTF(url, position, rotation, scale) {
+  loader.load(
+    url,
+    function (gltf) {
+      const object = gltf.scene;
+      scene.add(object);
+      if (position) object.position.set(position.x, position.y, position.z);
+      if (rotation) object.rotation.set(rotation.x, rotation.y, rotation.z);
+      if (scale) object.scale.set(scale.x, scale.y, scale.z);
+
+      animate();
+    },
+    function (xhr) {
+      console.log(url + " " + (xhr.loaded / xhr.total) * 100 + "% loaded");
+    },
+    function (error) {
+      console.error("An error happened", error);
+    },
+  );
+}
+
+// Load the chairs and rug with appropriate positions and scales
+loadGLTF("/chair.glb", { x: -0.8, y: 0.03, z: 0 }, null, {
+  x: 2.0,
+  y: 2.0,
+  z: 2.0,
+});
+loadGLTF(
   "/chair.glb",
-  function (gltf) {
-    const chair = gltf.scene;
-    scene.add(chair);
-    chair.position.y = 0.03;
-    chair.position.x = -0.8;
-    chair.scale.set(2.0, 2.0, 2.0);
-
-    animate();
-  }, // called while loading is progressing
-  function (xhr) {
-    console.log("chair " + (xhr.loaded / xhr.total) * 100 + "% loaded");
-  },
-  // called when loading has errors
-  function (error) {
-    console.log("An error happened");
-  },
+  { x: 2, y: 0.03, z: 0 },
+  { x: 0, y: 3, z: 0 },
+  { x: 2.0, y: 2.0, z: 2.0 },
 );
-
-loader.load(
+loadGLTF(
   "/chair.glb",
-  function (gltf) {
-    const chair = gltf.scene;
-    scene.add(chair);
-    chair.position.x = 2;
-    chair.rotation.y = 3;
-    chair.position.y = 0.03;
-    chair.scale.set(2.0, 2.0, 2.0);
-
-    animate();
-  }, // called while loading is progressing
-  function (xhr) {
-    console.log("chair " + (xhr.loaded / xhr.total) * 100 + "% loaded");
-  },
-  // called when loading has errors
-  function (error) {
-    console.log("An error happened");
-  },
+  { x: 0, y: 0.03, z: 0.7 },
+  { x: 0, y: 7, z: 0 },
+  { x: 2.0, y: 2.0, z: 2.0 },
 );
-
-loader.load(
-  "/chair.glb",
-  function (gltf) {
-    const chair = gltf.scene;
-    scene.add(chair);
-    chair.position.z = 0.7;
-    chair.rotation.y = 7;
-    chair.position.y = 0.03;
-    chair.scale.set(2.0, 2.0, 2.0);
-
-    animate();
-  }, // called while loading is progressing
-  function (xhr) {
-    console.log("chair " + (xhr.loaded / xhr.total) * 100 + "% loaded");
-  },
-  // called when loading has errors
-  function (error) {
-    console.log("An error happened");
-  },
-);
-
-loader.load(
-  "/rug.glb",
-  function (gltf) {
-    const rug = gltf.scene;
-    scene.add(rug);
-    rug.scale.set(2.0, 2.0, 2.0);
-
-    animate();
-  }, // called while loading is progressing
-  function (xhr) {
-    console.log("rug " + (xhr.loaded / xhr.total) * 100 + "% loaded");
-  },
-  // called when loading has errors
-  function (error) {
-    console.log("An error happened");
-  },
-);
+loadGLTF("/rug.glb", null, null, { x: 2.0, y: 2.0, z: 2.0 });
 
 camera.position.z = 5.0;
 camera.position.y = 4.0;
