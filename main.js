@@ -1,7 +1,7 @@
 import * as THREE from "three";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
-import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 import * as GaussianSplats3D from "@mkkellogg/gaussian-splats-3d";
+// import * as ZapSplat from "@zappar/three-gaussian-splat";
 
 const scene = new THREE.Scene();
 
@@ -17,13 +17,9 @@ renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
 renderer.autoClear = false;
 
-const controls = new OrbitControls(camera, renderer.domElement);
-controls.update();
-
 // setup renderer
 renderer.setSize(window.innerWidth, window.innerHeight);
 renderer.setClearColor({ color: 0x000000 });
-const element = renderer.domElement;
 renderer.render(scene, camera);
 
 const loader = new GLTFLoader();
@@ -120,7 +116,7 @@ const viewer = new GaussianSplats3D.Viewer({
   selfDrivenMode: true,
   renderer: renderer,
   camera: camera,
-  useBuiltInControls: false,
+  useBuiltInControls: true,
   sharedMemoryForWorkers: false,
   sceneRevealMode: GaussianSplats3D.SceneRevealMode.Instant,
   antialiased: false,
@@ -144,22 +140,25 @@ viewer
 
 var localPlane = new THREE.Plane();
 
-var globalPlane = new THREE.Plane();
-
-renderer.clippingPlanes = [globalPlane];
+renderer.clippingPlanes = [localPlane];
 
 renderer.localClippingEnabled = true;
+
+viewer.clippingPlanes = [localPlane];
+
+viewer.localClippingEnabled = true;
+
+scene.clippingPlanes = [localPlane];
+
+scene.localClippingEnabled = true;
 
 var material = new THREE.MeshPhongMaterial({
   clippingPlanes: [localPlane],
   clipShadows: true,
 });
 
-viewer.clippingPlanes = [globalPlane];
-
 function animate() {
   requestAnimationFrame(animate);
   renderer.render(scene, camera);
-  controls.update();
 }
 animate();
