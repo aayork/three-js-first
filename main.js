@@ -1,7 +1,7 @@
 import * as THREE from "three";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
-import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 import * as GaussianSplats3D from "@mkkellogg/gaussian-splats-3d";
+import * as ZapSplat from "@zappar/three-gaussian-splat";
 
 const scene = new THREE.Scene();
 
@@ -17,16 +17,30 @@ renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
 renderer.autoClear = false;
 
-const controls = new OrbitControls(camera, renderer.domElement);
-controls.update();
-
 // setup renderer
 renderer.setSize(window.innerWidth, window.innerHeight);
 renderer.setClearColor({ color: 0x000000 });
-const element = renderer.domElement;
 renderer.render(scene, camera);
 
 const loader = new GLTFLoader();
+
+const bonsai = new URL("./bonsai.splat", import.meta.url).href;
+const maxSplats = Infinity;
+const splat = new ZapSplat.GaussianSplatMesh(
+  camera,
+  renderer,
+  bonsai,
+  maxSplats,
+);
+splat.load();
+scene.add(splat);
+
+renderer.setAnimationLoop(animation);
+
+function animation() {
+  splat.update();
+  renderer.render(scene, camera);
+}
 
 loader.load(
   "/chair.glb",
@@ -116,11 +130,13 @@ const light = new THREE.DirectionalLight(0xffffff, 1);
 light.position.set(0, 1, 1).normalize();
 scene.add(light);
 
+/*
+
 const viewer = new GaussianSplats3D.Viewer({
   selfDrivenMode: true,
   renderer: renderer,
   camera: camera,
-  useBuiltInControls: false,
+  useBuiltInControls: true,
   sharedMemoryForWorkers: false,
   sceneRevealMode: GaussianSplats3D.SceneRevealMode.Instant,
   antialiased: false,
@@ -142,24 +158,26 @@ viewer
     viewer.start();
   });
 
+  */
+
 var localPlane = new THREE.Plane();
 
-var globalPlane = new THREE.Plane();
-
-renderer.clippingPlanes = [globalPlane];
+renderer.clippingPlanes = [localPlane];
 
 renderer.localClippingEnabled = true;
+
+// viewer.clippingPlanes = [localPlane];
+
+// viewer.localClippingEnabled = true;
 
 var material = new THREE.MeshPhongMaterial({
   clippingPlanes: [localPlane],
   clipShadows: true,
 });
 
-viewer.clippingPlanes = [globalPlane];
-
 function animate() {
+  splat.update();
   requestAnimationFrame(animate);
   renderer.render(scene, camera);
-  controls.update();
 }
 animate();

@@ -1,6 +1,7 @@
 {
   "dependencies": {
     "@mkkellogg/gaussian-splats-3d": "^0.4.1",
+    "@zappar/three-gaussian-splat": "^0.1.0",
     "gaussian-splats-3d": "^0.0.5",
     "three": "^0.164.1"
   },
