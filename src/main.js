@@ -29,8 +29,9 @@ const loader = new GLTFLoader();
 
 const bonsai = new URL("/bonsai.splat", import.meta.url).href;
 const splat = new ZapSplat.GaussianSplatMesh(bonsai, Infinity);
-splat.load();
-scene.add(splat);
+splat.load().then(() => {
+  scene.add(splat);
+});
 
 const maskPlane = new ZapSplat.MaskingPlane();
 
