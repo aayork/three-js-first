@@ -5,6 +5,8 @@ import * as ZapSplat from "@zappar/three-gaussian-splat";
 
 const scene = new THREE.Scene();
 
+var splitVisible = true;
+
 const camera = new THREE.PerspectiveCamera(
   75,
   window.innerWidth / window.innerHeight,
@@ -27,13 +29,32 @@ controls.update();
 
 const loader = new GLTFLoader();
 
-const bonsai = new URL("./public/bonsai.splat", import.meta.url).href;
-const splat = new ZapSplat.GaussianSplatMesh(bonsai, Infinity);
+const splat = new ZapSplat.GaussianSplatMesh("/model.splat", Infinity);
 scene.add(splat);
+
+const maskSphere = new ZapSplat.MaskingSphere();
+
+splat.addMaskMesh(maskSphere);
+maskSphere.position.y = 0;
+maskSphere.scale.setScalar(3.5);
+maskSphere.rotation.x = 1;
+// set to invisible once finalized position
+maskSphere.visible = false;
 
 const maskPlane = new ZapSplat.MaskingPlane();
 
+maskPlane.position.y = 0.5;
+maskPlane.rotation.x = 1.58889;
+maskPlane.visible = false;
+
+splat.position.set(0, 1.25, 0);
+
+splat.scale.set(2, 2, 2);
+
 splat.addMaskMesh(maskPlane);
+
+const loadingManager = new THREE.LoadingManager();
+splat.load(loadingManager);
 
 // Function to load a GLTF file and add it to the scene
 function loadGLTF(url, position, rotation, scale) {
@@ -58,24 +79,28 @@ function loadGLTF(url, position, rotation, scale) {
 }
 
 // Load the chairs and rug with appropriate positions and scales
-loadGLTF("/chair.glb", { x: -0.8, y: 0.03, z: 0 }, null, {
+loadGLTF("/chair.glb", { x: -0.5, y: -0.75, z: 0 }, null, {
   x: 2.0,
   y: 2.0,
   z: 2.0,
 });
 loadGLTF(
   "/chair.glb",
-  { x: 2, y: 0.03, z: 0 },
+  { x: 2, y: -0.75, z: 0 },
   { x: 0, y: 3, z: 0 },
   { x: 2.0, y: 2.0, z: 2.0 },
 );
 loadGLTF(
   "/chair.glb",
-  { x: 0, y: 0.03, z: 0.7 },
+  { x: 0, y: -0.75, z: 0.7 },
   { x: 0, y: 7, z: 0 },
   { x: 2.0, y: 2.0, z: 2.0 },
 );
-loadGLTF("/rug.glb", null, null, { x: 2.0, y: 2.0, z: 2.0 });
+loadGLTF("/rug.glb", { x: 0, y: -0.745, z: 0 }, null, {
+  x: 2.0,
+  y: 2.0,
+  z: 2.0,
+});
 
 camera.position.z = 5.0;
 camera.position.y = 4.0;
@@ -86,6 +111,10 @@ light.position.set(0, 1, 1).normalize();
 scene.add(light);
 
 var localPlane = new THREE.Plane();
+localPlane.setFromNormalAndCoplanarPoint(
+  new THREE.Vector3(0, 0, 1).applyQuaternion(maskPlane.quaternion),
+  maskPlane.position,
+);
 
 renderer.clippingPlanes = [localPlane];
 
@@ -94,7 +123,28 @@ renderer.localClippingEnabled = true;
 function animate() {
   controls.update();
   requestAnimationFrame(animate);
-  splat.update();
+  splat.update(camera, renderer);
   renderer.render(scene, camera);
 }
 animate();
+
+// Function to toggle the visibility of maskPlane and localPlane
+function togglePlanes() {
+  if (splitVisible == true) {
+    localPlane.constant = Infinity; // Adjust the constant as needed
+    maskPlane.position.y = -20;
+    splitVisible = false;
+  } else {
+    splitVisible = true;
+    maskPlane.position.y = 0.5;
+    maskPlane.rotation.x = 1.58889;
+    localPlane.constant = 0;
+  }
+}
+
+// Event listener for keydown event
+document.addEventListener("keydown", (event) => {
+  if (event.key === "z") {
+    togglePlanes();
+  }
+});
