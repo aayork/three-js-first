@@ -27,23 +27,14 @@ controls.update();
 
 const loader = new GLTFLoader();
 
-const bonsai = new URL("./bonsai.splat", import.meta.url).href;
-const maxSplats = Infinity;
-const splat = new ZapSplat.GaussianSplatMesh(
-  camera,
-  renderer,
-  bonsai,
-  maxSplats,
-);
+const bonsai = new URL("/bonsai.splat", import.meta.url).href;
+const splat = new ZapSplat.GaussianSplatMesh(bonsai, Infinity);
 splat.load();
 scene.add(splat);
 
-renderer.setAnimationLoop(animation);
+const maskPlane = new ZapSplat.MaskingPlane();
 
-function animation() {
-  splat.update();
-  renderer.render(scene, camera);
-}
+splat.addMaskMesh(maskPlane);
 
 loader.load(
   "/chair.glb",
@@ -140,9 +131,9 @@ renderer.clippingPlanes = [localPlane];
 renderer.localClippingEnabled = true;
 
 function animate() {
-  splat.update();
   controls.update();
   requestAnimationFrame(animate);
+  splat.update();
   renderer.render(scene, camera);
 }
 animate();
