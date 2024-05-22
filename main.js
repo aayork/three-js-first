@@ -1,7 +1,6 @@
 import * as THREE from "three";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 import * as GaussianSplats3D from "@mkkellogg/gaussian-splats-3d";
-// import * as ZapSplat from "@zappar/three-gaussian-splat";
 
 const scene = new THREE.Scene();
 
