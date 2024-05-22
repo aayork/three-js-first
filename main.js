@@ -1,6 +1,6 @@
 import * as THREE from "three";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
-import * as GaussianSplats3D from "@mkkellogg/gaussian-splats-3d";
+import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 import * as ZapSplat from "@zappar/three-gaussian-splat";
 
 const scene = new THREE.Scene();
@@ -21,6 +21,9 @@ renderer.autoClear = false;
 renderer.setSize(window.innerWidth, window.innerHeight);
 renderer.setClearColor({ color: 0x000000 });
 renderer.render(scene, camera);
+
+const controls = new OrbitControls(camera, renderer.domElement);
+controls.update();
 
 const loader = new GLTFLoader();
 
@@ -130,53 +133,15 @@ const light = new THREE.DirectionalLight(0xffffff, 1);
 light.position.set(0, 1, 1).normalize();
 scene.add(light);
 
-/*
-
-const viewer = new GaussianSplats3D.Viewer({
-  selfDrivenMode: true,
-  renderer: renderer,
-  camera: camera,
-  useBuiltInControls: true,
-  sharedMemoryForWorkers: false,
-  sceneRevealMode: GaussianSplats3D.SceneRevealMode.Instant,
-  antialiased: false,
-  logLevel: GaussianSplats3D.LogLevel.None,
-  sphericalHarmonicsDegree: 0,
-  scene: scene,
-});
-
-viewer
-  .addSplatScenes([
-    {
-      path: "/garden.ksplat",
-      position: [0, 3.58, 0],
-      rotation: [1, 0, 0, 0.2768976],
-      scale: [1.15, 1.0, 1.0],
-    },
-  ])
-  .then(() => {
-    viewer.start();
-  });
-
-  */
-
 var localPlane = new THREE.Plane();
 
 renderer.clippingPlanes = [localPlane];
 
 renderer.localClippingEnabled = true;
 
-// viewer.clippingPlanes = [localPlane];
-
-// viewer.localClippingEnabled = true;
-
-var material = new THREE.MeshPhongMaterial({
-  clippingPlanes: [localPlane],
-  clipShadows: true,
-});
-
 function animate() {
   splat.update();
+  controls.update();
   requestAnimationFrame(animate);
   renderer.render(scene, camera);
 }
