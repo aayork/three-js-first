@@ -29,19 +29,19 @@ controls.update();
 
 const loader = new GLTFLoader();
 
-const splat = new ZapSplat.GaussianSplatMesh("Lostplacetest3.splat", Infinity);
+const splat = new ZapSplat.GaussianSplatMesh("meeting room.splat", Infinity);
 
 scene.add(splat);
 
 const maskPlane = new ZapSplat.MaskingPlane();
 
-maskPlane.position.y = -0.4;
+maskPlane.position.y = -0.9;
 maskPlane.rotation.x = 1.58889;
 maskPlane.visible = false;
 
-splat.position.set(0, 0, 0);
+splat.position.set(4, -0.8, 0);
 
-splat.scale.set(10, 10, 10);
+splat.scale.set(5.9, 5.9, 5.9);
 
 splat.addMaskMesh(maskPlane);
 
@@ -78,7 +78,7 @@ loadGLTF("/chair.glb", { x: -0.5, y: -0.75, z: 0 }, null, {
 });
 loadGLTF(
   "/chair.glb",
-  { x: 2, y: -0.75, z: 0 },
+  { x: 1, y: -0.75, z: 0 },
   { x: 0, y: 3, z: 0 },
   { x: 2.0, y: 2.0, z: 2.0 },
 );
@@ -141,7 +141,7 @@ function togglePlanes() {
     splitVisible = false;
   } else {
     splitVisible = true;
-    maskPlane.position.y = -0.4;
+    maskPlane.position.y = -0.9;
     maskPlane.rotation.x = 1.58889;
   }
 }
