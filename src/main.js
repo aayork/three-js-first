@@ -88,6 +88,7 @@ const viewer = new GaussianSplats3D.Viewer({
   antialiased: false,
   logLevel: GaussianSplats3D.LogLevel.None,
   sphericalHarmonicsDegree: 0,
+  dynamicScene: true,
   scene: scene,
 });
 
@@ -95,7 +96,7 @@ viewer
   .addSplatScenes([
     {
       path: "/garden.ksplat",
-      position: [0, 3.58, 0],
+      position: [0, 2.85, 0],
       rotation: [1, 0, 0, 0.2768976],
       scale: [1.15, 1.0, 1.0],
     },
