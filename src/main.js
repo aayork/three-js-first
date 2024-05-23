@@ -127,7 +127,7 @@ function animate() {
   controls.update();
   requestAnimationFrame(animate);
   splat.update(camera, renderer);
-  renderer.render(scene, camera);
+  render();
 }
 animate();
 
@@ -136,17 +136,26 @@ function onPointerMove(event) {
   pointer.y = -(event.clientY / window.innerHeight) * 2 + 1;
 }
 
+const geometry = new THREE.SphereGeometry(0.25, 32, 16);
+const material = new THREE.MeshBasicMaterial({ color: 0xffff00 });
+const sphere = new THREE.Mesh(geometry, material);
+scene.add(sphere);
+
+const axesHelper = new THREE.AxesHelper(5);
+scene.add(axesHelper);
+
 function render() {
   // update the picking ray with the camera and pointer position
   raycaster.setFromCamera(pointer, camera);
 
   // calculate objects intersecting the picking ray
-  const intersects = raycaster.intersectObjects(scene.children);
+  const intersects = raycaster.intersectObjects([splat]);
 
-  for (let i = 0; i < intersects.length; i++) {
-    intersects[i].object.material.color.set(0xff0000);
+  console.log(intersects[1]);
+
+  if (intersects.length > 0) {
+    sphere.position.copy(intersects[0].point);
   }
-
   renderer.render(scene, camera);
 }
 
@@ -167,6 +176,8 @@ function togglePlanes() {
     localPlane.constant = 0;
   }
 }
+
+console.log(scene.children);
 
 // Event listener for keydown event
 document.addEventListener("keydown", (event) => {
