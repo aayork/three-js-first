@@ -29,27 +29,19 @@ controls.update();
 
 const loader = new GLTFLoader();
 
-const splat = new ZapSplat.GaussianSplatMesh("/model.splat", Infinity);
+const splat = new ZapSplat.GaussianSplatMesh("Lostplacetest3.splat", Infinity);
+
 scene.add(splat);
-
-const maskSphere = new ZapSplat.MaskingSphere();
-
-splat.addMaskMesh(maskSphere);
-maskSphere.position.y = 0;
-maskSphere.scale.setScalar(3.5);
-maskSphere.rotation.x = 1;
-// set to invisible once finalized position
-maskSphere.visible = false;
 
 const maskPlane = new ZapSplat.MaskingPlane();
 
-maskPlane.position.y = 0.5;
+maskPlane.position.y = -0.4;
 maskPlane.rotation.x = 1.58889;
 maskPlane.visible = false;
 
-splat.position.set(0, 1.25, 0);
+splat.position.set(0, 0, 0);
 
-splat.scale.set(2, 2, 2);
+splat.scale.set(10, 10, 10);
 
 splat.addMaskMesh(maskPlane);
 
@@ -110,26 +102,8 @@ const light = new THREE.DirectionalLight(0xffffff, 1);
 light.position.set(0, 1, 1).normalize();
 scene.add(light);
 
-var localPlane = new THREE.Plane();
-localPlane.setFromNormalAndCoplanarPoint(
-  new THREE.Vector3(0, 0, 1).applyQuaternion(maskPlane.quaternion),
-  maskPlane.position,
-);
-
-renderer.clippingPlanes = [localPlane];
-
-renderer.localClippingEnabled = true;
-
 const raycaster = new THREE.Raycaster();
 const pointer = new THREE.Vector2();
-
-function animate() {
-  controls.update();
-  requestAnimationFrame(animate);
-  splat.update(camera, renderer);
-  render();
-}
-animate();
 
 function onPointerMove(event) {
   pointer.x = (event.clientX / window.innerWidth) * 2 - 1;
@@ -141,9 +115,6 @@ const material = new THREE.MeshBasicMaterial({ color: 0xffff00 });
 const sphere = new THREE.Mesh(geometry, material);
 scene.add(sphere);
 
-const axesHelper = new THREE.AxesHelper(5);
-scene.add(axesHelper);
-
 function render() {
   // update the picking ray with the camera and pointer position
   raycaster.setFromCamera(pointer, camera);
@@ -154,7 +125,7 @@ function render() {
   console.log(intersects[1]);
 
   if (intersects.length > 0) {
-    sphere.position.copy(intersects[0].point);
+    sphere.position.copy(intersects[1].point);
   }
   renderer.render(scene, camera);
 }
@@ -166,18 +137,14 @@ window.requestAnimationFrame(render);
 // Function to toggle the visibility of maskPlane and localPlane
 function togglePlanes() {
   if (splitVisible == true) {
-    localPlane.constant = Infinity; // Adjust the constant as needed
     maskPlane.position.y = -20;
     splitVisible = false;
   } else {
     splitVisible = true;
-    maskPlane.position.y = 0.5;
+    maskPlane.position.y = -0.4;
     maskPlane.rotation.x = 1.58889;
-    localPlane.constant = 0;
   }
 }
-
-console.log(scene.children);
 
 // Event listener for keydown event
 document.addEventListener("keydown", (event) => {
@@ -185,3 +152,12 @@ document.addEventListener("keydown", (event) => {
     togglePlanes();
   }
 });
+
+function animate() {
+  controls.update();
+  requestAnimationFrame(animate);
+  splat.update(camera, renderer);
+  render();
+}
+
+animate();
