@@ -95,10 +95,10 @@ const viewer = new GaussianSplats3D.Viewer({
 viewer
   .addSplatScenes([
     {
-      path: "/garden.ksplat",
-      position: [0, 2.85, 0],
-      rotation: [1, 0, 0, 0.2768976],
-      scale: [1.15, 1.0, 1.0],
+      path: "/meeting room.splat",
+      position: [0, -0.75, 0],
+      rotation: [1, 0, 0, 0],
+      scale: [4.5, 4.5, 4.5],
     },
   ])
   .then(() => {
