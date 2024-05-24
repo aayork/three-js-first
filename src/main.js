@@ -105,12 +105,6 @@ viewer
     viewer.start();
   });
 
-/*
-var localPlane = new THREE.Plane();
-renderer.clippingPlanes = [localPlane];
-renderer.localClippingEnabled = true;
-*/
-
 function animate() {
   requestAnimationFrame(animate);
   renderer.render(scene, camera);
