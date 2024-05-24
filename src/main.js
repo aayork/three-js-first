@@ -48,7 +48,7 @@ function loadGLTF(url, position, rotation, scale) {
 }
 
 // Load the chairs and rug with appropriate positions and scales
-loadGLTF("/chair.glb", { x: -0.5, y: -0.75, z: 0 }, null, {
+loadGLTF("/chair.glb", { x: -1, y: -0.75, z: 0 }, null, {
   x: 2.0,
   y: 2.0,
   z: 2.0,
@@ -105,9 +105,11 @@ viewer
     viewer.start();
   });
 
+/*
 var localPlane = new THREE.Plane();
 renderer.clippingPlanes = [localPlane];
 renderer.localClippingEnabled = true;
+*/
 
 function animate() {
   requestAnimationFrame(animate);
