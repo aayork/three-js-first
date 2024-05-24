@@ -48,30 +48,30 @@ function loadGLTF(url, position, rotation, scale) {
 }
 
 // Load the chairs and rug with appropriate positions and scales
-loadGLTF("/chair.glb", { x: -1, y: -0.75, z: 0 }, null, {
-  x: 2.0,
-  y: 2.0,
-  z: 2.0,
+loadGLTF("/chair.glb", { x: -1, y: -1.25, z: 0 }, null, {
+  x: 1.0,
+  y: 1.0,
+  z: 1.0,
 });
 
 loadGLTF(
   "/chair.glb",
-  { x: 2, y: -0.75, z: 0 },
+  { x: 2, y: -1.25, z: 0 },
   { x: 0, y: 3, z: 0 },
-  { x: 2.0, y: 2.0, z: 2.0 },
+  { x: 1.0, y: 1.0, z: 1.0 },
 );
 
 loadGLTF(
   "/chair.glb",
-  { x: 0, y: -0.75, z: 0.7 },
+  { x: 0, y: -1.25, z: 0.7 },
   { x: 0, y: 7, z: 0 },
-  { x: 2.0, y: 2.0, z: 2.0 },
+  { x: 1.0, y: 1.0, z: 1.0 },
 );
 
-loadGLTF("/rug.glb", { x: 0, y: -0.745, z: 0 }, null, {
-  x: 2.0,
-  y: 2.0,
-  z: 2.0,
+loadGLTF("/rug.glb", { x: 0, y: -1.2, z: 0 }, null, {
+  x: 1.0,
+  y: 1.0,
+  z: 1.0,
 });
 
 const light = new THREE.DirectionalLight(0xffffff, 1);
@@ -95,10 +95,10 @@ const viewer = new GaussianSplats3D.Viewer({
 viewer
   .addSplatScenes([
     {
-      path: "/meeting room.splat",
+      path: "/football-field.splat",
       position: [0, -0.75, 0],
       rotation: [1, 0, 0, 0],
-      scale: [4.5, 4.5, 4.5],
+      scale: [50, 50, 50],
     },
   ])
   .then(() => {
