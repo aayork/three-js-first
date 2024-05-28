@@ -10,9 +10,9 @@ const camera = new THREE.PerspectiveCamera(
   0.1,
   1000,
 );
-camera.position.z = 2.0;
-camera.position.y = 2.0;
-camera.position.x = 0.0;
+camera.position.z = -10.0;
+camera.position.y = 4.0;
+camera.position.x = 2.0;
 
 const renderer = new THREE.WebGLRenderer();
 renderer.setSize(window.innerWidth, window.innerHeight);
@@ -48,7 +48,7 @@ function loadGLTF(url, position, rotation, scale) {
 }
 
 // Load the chairs and rug with appropriate positions and scales
-loadGLTF("/chair.glb", { x: -1.5, y: -1.25, z: 0 }, null, {
+loadGLTF("/chair.glb", { x: -1.5, y: -1.25, z: -2 }, null, {
   x: 6.0,
   y: 6.0,
   z: 6.0,
@@ -56,7 +56,7 @@ loadGLTF("/chair.glb", { x: -1.5, y: -1.25, z: 0 }, null, {
 
 loadGLTF(
   "/chair.glb",
-  { x: 1, y: -1.25, z: 0 },
+  { x: 1, y: -1.25, z: 5 },
   { x: 0, y: 3, z: 0 },
   { x: 6.0, y: 6.0, z: 6.0 },
 );
@@ -95,8 +95,8 @@ const viewer = new GaussianSplats3D.Viewer({
 viewer
   .addSplatScenes([
     {
-      path: "/bigger_room.splat",
-      position: [-5, 9, -10],
+      path: "/bigger_room.cleaned.splat",
+      position: [-2, -0.3, -3],
       rotation: [1, 0, 0, 0],
       scale: [2.5, 2.5, 2.5],
     },
