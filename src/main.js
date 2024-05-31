@@ -54,6 +54,12 @@ loadGLTF("/chair.glb", { x: -1.5, y: -1.25, z: -2 }, null, {
   z: 6.0,
 });
 
+loadGLTF("/my_room.glb", { x: -1.5, y: 10.68, z: 3 }, null, {
+  x: 8.0,
+  y: 8.0,
+  z: 8.0,
+});
+
 loadGLTF(
   "/chair.glb",
   { x: 1, y: -1.25, z: 5 },
@@ -78,6 +84,10 @@ const light = new THREE.DirectionalLight(0xffffff, 1);
 light.position.set(0, 1, 1).normalize();
 scene.add(light);
 
+const light2 = new THREE.DirectionalLight(0xffffff, 1);
+light2.position.set(0, 1, 0).normalize();
+scene.add(light2);
+
 const viewer = new GaussianSplats3D.Viewer({
   selfDrivenMode: true,
   renderer: renderer,
@@ -92,6 +102,7 @@ const viewer = new GaussianSplats3D.Viewer({
   scene: scene,
 });
 
+/*
 viewer
   .addSplatScenes([
     {
@@ -104,6 +115,9 @@ viewer
   .then(() => {
     viewer.start();
   });
+  */
+
+viewer.start();
 
 function animate() {
   requestAnimationFrame(animate);
