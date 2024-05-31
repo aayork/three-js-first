@@ -88,6 +88,15 @@ const light2 = new THREE.DirectionalLight(0xffffff, 1);
 light2.position.set(0, 1, 0).normalize();
 scene.add(light2);
 
+const light3 = new THREE.DirectionalLight(0xffffff, 1);
+light3.position.set(1, 1, 0).normalize();
+scene.add(light3);
+
+// Add a hemispheric light to the scene
+const hemisphereLight = new THREE.HemisphereLight(0xffffff, 0x420042);
+hemisphereLight.position.set(-2, -3, -4);
+scene.add(hemisphereLight);
+
 const viewer = new GaussianSplats3D.Viewer({
   selfDrivenMode: true,
   renderer: renderer,
