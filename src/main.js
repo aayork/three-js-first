@@ -10,10 +10,9 @@ const camera = new THREE.PerspectiveCamera(
   0.1,
   1000,
 );
-camera.position.z = 2.0;
-camera.position.y = 2.0;
-camera.position.x = 0.0;
-
+camera.position.x = -0.55623;
+camera.position.y = 0.3267;
+camera.position.z = -0.91984;
 /*
 
 // Set the aspect ratio
@@ -116,10 +115,10 @@ const viewer = new GaussianSplats3D.Viewer({
 viewer
   .addSplatScenes([
     {
-      path: "/cleaned_garden.splat",
-      position: [0, -0.33, 0],
+      path: "/bar room.splat",
+      position: [-1, -1.15, 0],
       rotation: [1, 0, 0, 0],
-      scale: [3, 3, 3],
+      scale: [1.75, 1.75, 1.75],
     },
   ])
   .then(() => {
