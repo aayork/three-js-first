@@ -4,7 +4,6 @@ import * as GaussianSplats3D from "@mkkellogg/gaussian-splats-3d";
 
 const scene = new THREE.Scene();
 
-/*
 const camera = new THREE.PerspectiveCamera(
   75,
   window.innerWidth / window.innerHeight,
@@ -14,7 +13,8 @@ const camera = new THREE.PerspectiveCamera(
 camera.position.z = 2.0;
 camera.position.y = 2.0;
 camera.position.x = 0.0;
-*/
+
+/*
 
 // Set the aspect ratio
 const aspect = window.innerWidth / window.innerHeight;
@@ -34,6 +34,7 @@ camera.position.y = 2.0;
 camera.position.x = 0.0;
 camera.lookAt(new THREE.Vector3(0, 0, 0));
 
+*/
 const renderer = new THREE.WebGLRenderer();
 renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
