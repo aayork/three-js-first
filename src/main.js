@@ -1,5 +1,6 @@
 import * as THREE from "three";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
+import { USDZLoader } from "three/addons/loaders/USDZLoader.js";
 import * as GaussianSplats3D from "@mkkellogg/gaussian-splats-3d";
 
 const scene = new THREE.Scene();
@@ -13,27 +14,7 @@ const camera = new THREE.PerspectiveCamera(
 camera.position.x = -0.55623;
 camera.position.y = 0.3267;
 camera.position.z = -0.91984;
-/*
 
-// Set the aspect ratio
-const aspect = window.innerWidth / window.innerHeight;
-
-// Define the orthographic camera parameters
-const frustumSize = 2;
-const camera = new THREE.OrthographicCamera(
-  (frustumSize * aspect) / -2,
-  (frustumSize * aspect) / 2,
-  frustumSize / 2,
-  frustumSize / -2,
-  0.1,
-  1000,
-);
-camera.position.z = 2.0;
-camera.position.y = 2.0;
-camera.position.x = 0.0;
-camera.lookAt(new THREE.Vector3(0, 0, 0));
-
-*/
 const renderer = new THREE.WebGLRenderer();
 renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
@@ -43,11 +24,16 @@ renderer.setClearColor({ color: 0x000000 });
 renderer.render(scene, camera);
 
 // Loader for 3D files
-const loader = new GLTFLoader();
+const GLB_Loader = new GLTFLoader();
+
+const USD_Loader = new USDZLoader();
+USD_Loader.load("/barstool.usdz", function (usd) {
+  scene.add(usd);
+});
 
 // Function to load a GLTF file and add it to the scene
 function loadGLTF(url, position, rotation, scale) {
-  loader.load(
+  GLB_Loader.load(
     url,
     function (gltf) {
       const object = gltf.scene;
